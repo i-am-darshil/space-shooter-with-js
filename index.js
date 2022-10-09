@@ -39,8 +39,8 @@ class Projectile {
 
   update() {
     this.draw()
-    this.x += this.velocity.x
-    this.y += this.velocity.y
+    this.x += this.velocity.x * 5
+    this.y += this.velocity.y * 5
   }
 }
 
@@ -71,7 +71,7 @@ const playerPosX = canvas.width / 2;
 const playerPosY = canvas.height / 2;
 
 
-const player = new Player(playerPosX, playerPosY, 30, 'blue')
+const player = new Player(playerPosX, playerPosY, 10, 'white')
 
 const projectiles = []
 const enemies = []
@@ -90,7 +90,11 @@ function spawnEnemies() {
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
     }
 
-    const color = 'green'
+    r = Math.floor(Math.random() * 256)
+    g = Math.floor(Math.random() * 256)
+    b = Math.floor(Math.random() * 256)
+
+    const color = `rgb(${r}, ${g}, ${b})`
     const angle = Math.atan2(
       playerPosY - y,
       playerPosX - x
@@ -102,13 +106,14 @@ function spawnEnemies() {
     enemies.push(
       new Enemy(x, y, radius, color, velocity)
     )
-  }, 1500)
+  }, 1000)
 }
 
 let animationId;
 function animate() {
   animationId = window.requestAnimationFrame(animate)
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
   player.draw()
   projectiles.forEach((projectile, projectileIndex) => {
     projectile.update()
@@ -159,7 +164,7 @@ window.addEventListener('click', (event) => {
       playerPosX,
       playerPosY,
       5,
-      'red',
+      'white',
       velocity
     )
   )
