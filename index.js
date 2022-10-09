@@ -2,9 +2,24 @@ const canvas = document.querySelector("canvas")
 
 const ctx = canvas.getContext('2d')
 
+const scoreEl = document.querySelector("#score")
+let score = 0;
+
+let highScore = getStorage('highScore', 0)
+const highScoreEl = document.querySelector("#highScore")
+highScoreEl.innerHTML = highScore
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+function getStorage(name, deafult){
+  if(localStorage.getItem(name)===null){
+    return deafult;
+  }
+  else{
+    return Number(localStorage.getItem(name));
+  }
+}
 class Player {
   constructor(x, y, radius, color) {
     this.x = x
@@ -106,7 +121,7 @@ function spawnEnemies() {
     enemies.push(
       new Enemy(x, y, radius, color, velocity)
     )
-  }, 1500)
+  }, 1200)
 }
 
 let animationId;
@@ -145,12 +160,20 @@ function animate() {
 
         if (enemy.radius > 18) {
           enemy.radius -= 10
+          score += 1
           console.log("Shrink enemy")
           projectiles.splice(projectileIndex, 1)
         } else {
           console.log("Remove enemy from screen")
+          score += 2
           enemies.splice(enemyIndex, 1)
           projectiles.splice(projectileIndex, 1)
+        }
+        scoreEl.innerHTML = score
+        if (score > highScore) {
+          highScoreEl.innerHTML = score
+          highScore = score
+          localStorage.setItem("highScore", highScore);
         }
       }
     })

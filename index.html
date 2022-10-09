@@ -6,7 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+<style>
+  body {
+    margin: 0;
+  }
+  div {
+    position: absolute;
+    color: white;
+    font-size: large;
+    user-select: none;
+  }
+</style>
 <body>
+  <div>Score : <span id="score">0</span> :: High Score : <span id="highScore"></span></div>
   <canvas></canvas>
   <script src="./index.js"></script>
 </body>
