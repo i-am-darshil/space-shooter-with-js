@@ -105,21 +105,36 @@ function spawnEnemies() {
   }, 1500)
 }
 
+let animationId;
 function animate() {
-  window.requestAnimationFrame(animate)
+  animationId = window.requestAnimationFrame(animate)
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   player.draw()
   projectiles.forEach(projectile => {
     projectile.update()
   })
 
-  enemies.forEach((enemy) => {
+  enemies.forEach((enemy, enemyIndex) => {
     enemy.update()
+
+    const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+    if (dist - enemy.radius - player.radius < 1) {
+      console.log("End Game")
+      window.cancelAnimationFrame(animationId)
+    }
+
+    projectiles.forEach((projectile, projectileIndex) => {
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+      if (dist - enemy.radius - projectile.radius < 1) {
+        console.log("Remove from screen")
+        enemies.splice(enemyIndex, 1)
+        projectiles.splice(projectileIndex, 1)
+      }
+    })
   })
 }
 
 window.addEventListener('click', (event) => {
-  console.log(event)
   const angle = Math.atan2(
     event.clientY - playerPosY,
     event.clientX - playerPosX
