@@ -90,9 +90,9 @@ function spawnEnemies() {
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
     }
 
-    r = Math.floor(Math.random() * 256)
-    g = Math.floor(Math.random() * 256)
-    b = Math.floor(Math.random() * 256)
+    r = Math.floor(Math.random() * 250)
+    g = Math.floor(Math.random() * 250)
+    b = Math.floor(Math.random() * 250)
 
     const color = `rgb(${r}, ${g}, ${b})`
     const angle = Math.atan2(
@@ -106,7 +106,7 @@ function spawnEnemies() {
     enemies.push(
       new Enemy(x, y, radius, color, velocity)
     )
-  }, 1000)
+  }, 1500)
 }
 
 let animationId;
@@ -142,9 +142,16 @@ function animate() {
     projectiles.forEach((projectile, projectileIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
       if (dist - enemy.radius - projectile.radius < 1) {
-        console.log("Remove from screen")
-        enemies.splice(enemyIndex, 1)
-        projectiles.splice(projectileIndex, 1)
+
+        if (enemy.radius > 18) {
+          enemy.radius -= 10
+          console.log("Shrink enemy")
+          projectiles.splice(projectileIndex, 1)
+        } else {
+          console.log("Remove enemy from screen")
+          enemies.splice(enemyIndex, 1)
+          projectiles.splice(projectileIndex, 1)
+        }
       }
     })
   })
